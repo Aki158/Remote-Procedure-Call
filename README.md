@@ -1,4 +1,4 @@
-![image](https://github.com/Aki158/Remote-Procedure-Call/assets/119317071/e22dab6b-4b36-4753-8b30-5e446dbedbc3)# Remote-Procedure-Call
+# Remote-Procedure-Call
 RecursionCSのBackendProject2_Remote-Procedure-Callのリポジトリーになります。
 
 ## 概要
