@@ -22,88 +22,90 @@ def main():
     }
 
     # ソケットを作成する
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
     # アドレスを定義する
-    #server_address = '/udp_socket_file'
-    server_address = '127.0.0.1'
+    serverAddress = '/socket_file'
 
     try:
         # 前回の実行でソケットファイルが残っていた場合、そのファイルを削除する
-        os.unlink(server_address)
+        os.unlink(serverAddress)
     except FileNotFoundError:
         pass
 
-    while True:
-        # サーバのアドレスをソケットに紐付ける
-        sock.bind(server_address)
+    # サーバのアドレスをソケットに紐付ける
+    sock.bind(serverAddress)
 
-        print('\nwaiting to receive message')
-
-        # クライエントのソケットからのデータ(json形式)を受信する
-        data, address = sock.recvfrom(4096)
-
-        # 受信したデータを表示する
-        print('received data : {}'.format(data))
-
-        receivedData = json.loads(data)
-        method = receivedData['method']
-        params = receivedData['params']
-        paramTypes = receivedData['param_types']
-        id = receivedData['id']
-
-        # JSON形式のデータ(結果、結果の型、同じリクエストID)をクライエントに送り返す
-        if method in funcHashmap:
-            # パラメータの検証を行う
-            if paramCheckHashmap[method] != str(paramTypes):
-                sendData = 'Invalid parameter\n \
-                    Input parameter : \
-                    double or [int,int] or string or [string,string] or string[]'
-            else:
-                results = funcHashmap[method](params)
-                resultsType = resultTypeCondition(results)
-                sendHashmap = {
-                    'results' : str(results),
-                    'result_type' : resultsType,
-                    'id' : id
-                }
-                sendData = json.dumps(sendHashmap)
-        else:
-            sendData = 'Function not found'
-
-        sent = sock.sendto(sendData, address)
-        print('sent data : {}'.format(sendData))
-
-        quitQuestion = input('Do you want to quit?(Y/N)').lower()
-        if quitQuestion == 'y':
-            break
+    # ソケットが接続要求を待機する
+    sock.listen(1)
     
-    # 最後にソケットを閉じてリソースを解放する
-    print('closing socket')
-    sock.close()
+    # クライアントからの接続を受け入れる
+    connection, _ = sock.accept()
+
+    try:
+        while True:
+            print('--------------------')
+            # クライアントのソケットからのデータ(json形式)を受信する
+            data = connection.recv(1024)
+
+            # 受け取ったデータはバイナリ形式なので、それを文字列に変換する
+            dataStr =  data.decode('utf-8')
+
+            # 受信したデータを表示する
+            print('received data : {}'.format(dataStr))
+
+            receivedData = json.loads(data)
+            method = receivedData['method']
+            params = receivedData['params']
+            paramTypes = receivedData['param_types']
+            id = receivedData['id']
+
+            # JSON形式のデータ(結果、結果の型、同じリクエストID)をクライアントに送り返す
+            if method in funcHashmap:
+                # パラメータの検証を行う
+                if paramCheckHashmap[method] != str(paramTypes):
+                    sendData = 'Invalid parameter'
+                else:
+                    results = funcHashmap[method](params)
+                    resultsType = resultTypeCondition(results)
+                    sendHashmap = {
+                        'results' : str(results),
+                        'result_type' : resultsType,
+                        'id' : id
+                    }
+                    sendData = json.dumps(sendHashmap)
+            else:
+                sendData = 'Function not found'
+
+            connection.sendall(sendData.encode('utf-8'))
+            print('sent data : {}'.format(sendData))
+    finally:
+        # 最後にソケットを閉じてリソースを解放する
+        print('closing socket')
+        sock.close()
 
 # typeを調べる
 def resultTypeCondition(t):
-    if isinstance(t, int):
+    if isinstance(t, bool):
+        return 'bool'
+    elif isinstance(t, int):
         return 'int'
     elif isinstance(t, float):
         return 'double'
     elif isinstance(t, str):
         return 'str'
-    elif isinstance(t, bool):
-        return 'bool'
     elif isinstance(t, list):
         return 'list'
     else:
-        return "It was a type I wasn't expecting"  
+        return "It was a type I wasn't expecting" 
 
 # 10進数xを最も近い整数に切り捨て、その結果を整数で返す
 def floor(x):
     return int(math.floor(x))
 
 # 方程式r^n=xにおける、rの値を計算する
-def nroot(n, x):
-    return math.pow(x,1/n)
+def nroot(arr):
+    return math.pow(arr[1],1/arr[0])
 
 # 入力文字列の逆である新しい文字列を返す
 def reverse(s):
@@ -111,9 +113,9 @@ def reverse(s):
 
 # 2つの入力文字列が互いにアナグラムであるかどうかを示すブール値を返す
 # ここでは大文字と小文字の区別はつけずスペースは文字として扱わないものとする
-def validAnagram(str1, str2):
-    s1 = str1.replace(' ', '').lower()
-    s2 = str2.replace(' ', '').lower()
+def validAnagram(strArr):
+    s1 = strArr[0].replace(' ', '').lower()
+    s2 = strArr[1].replace(' ', '').lower()
     hashmap1 = {}
     hashmap2 = {}
 
