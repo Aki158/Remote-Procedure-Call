@@ -1,5 +1,5 @@
 const net = require('node:net');
-const serverAddress = '/socket_file'
+const serverAddress = '127.0.0.1'
 
 class Client{
     constructor(address){

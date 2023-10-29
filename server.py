@@ -25,7 +25,7 @@ def main():
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
     # アドレスを定義する
-    serverAddress = '/socket_file'
+    serverAddress = '127.0.0.1'
 
     try:
         # 前回の実行でソケットファイルが残っていた場合、そのファイルを削除する
