@@ -13,7 +13,7 @@
 
 このシステムでは、RPCの簡易的なシステムを体験することができます。
 
-RPCとは、ネットワークを介して別々のコンピュータ上にあるプログラム間(異なるアドレス空間)で、同一コンピュータ内(ローカル)で呼び出しを行っているかのように感じさせることができるプログラミング手法です。
+RPCとは、ネットワークを介して別々のコンピュータ上にあるプログラム間(異なるアドレス空間)で、同一コンピュータ内(ローカル)で機能の呼び出しを行っているかのように感じさせることができるプログラミング手法です。
 
 RPCの実装には、下記のようなプログラミング言語を使用しています。
 
@@ -39,7 +39,7 @@ RPCの実装には、下記のようなプログラミング言語を使用し�
 | RPC | ネットワークを介して別々のコンピュータ上にあるプログラム間(異なるアドレス空間)で、同一コンピュータ内(ローカル)で呼び出しを行っているかのように感じさせることができるプログラミング手法です。 |
 
 ## 🧰前提条件
-このスクリプトを実行するには、下記ソフトウェアを事前にインストールしておく必要があります。
+このシステムを実行するには、下記ソフトウェアを事前にインストールしておく必要があります。
 
 インストールされていない場合は、[インストール](#インストール)/[使用方法](#使用方法)/[使用例](#使用例)で記載されているコマンドが実行できませんので
 
@@ -92,9 +92,9 @@ Node.jsのインストールについては、[UbuntuへのNode.jsのインス�
 
 ## 🍴インストール
 ### クローン
-このスクリプトをあなたのPCで実行するために、クローンします。
+このシステムをあなたのPCで実行するために、クローンします。
 
-クローンとは、このスクリプトの実行に必要なファイル(リポジトリのコンテンツ)をあなたのPCのローカル環境へコピーすることです。
+クローンとは、このシステムの実行に必要なファイル(リポジトリのコンテンツ)をあなたのPCのローカル環境へコピーすることです。
 
 下記手順でクローンしてください。
 
@@ -121,7 +121,7 @@ node client.py
 ```
 5. クライアント用ターミナルに0から6までの数字を入力し送信する
 6. クライアントが送信した数字をもとに、サーバ用ターミナルにデータが表示される
-7. サーバ用ターミナルが関数を実行した結果を送信し、クライアント用ターミナルにメッセージが表示される
+7. サーバ用ターミナルが関数の実行結果を送信し、クライアント用ターミナルにメッセージが表示される。
 
 ## 🙋使用例
 一通りの手順のイメージは[デモ](#デモ)を参考にしてください。
@@ -136,22 +136,9 @@ python3 server.py
 ```
 node client.py
 ```
-5. クライアント用ターミナルに0から6までの数字を入力し送信する。<br>0から6までの数字は、[RPCの入力と出力](RPCの入力と出力)の入力部分に該当します。<br>今回は、0を入力しました。
+5. クライアント用ターミナルに0から6までの数字を入力し送信する。<br>0から6までの数字は、[RPCの入出力表](RPCの入出力表)の入力部分に該当します。<br>今回は、0を入力しました。
 6. クライアントが送信した数字をもとに、サーバ用ターミナルにデータが表示される。<br>入力した0に紐づくデータが表示されました。
 7. サーバ用ターミナルが関数の実行結果を送信し、クライアント用ターミナルにメッセージが表示される。<br>クライアント用ターミナルに実行結果が表示されました。
-
-### 手順5の補足
-#### RPCの入力と出力
-| 入力 | 入力に紐づくデータ | 出力 |
-| ------- | ------- | ------- |
-| 0 | {<br>"method":"floor",<br>"params":5.345,<br>"param_types":"double",<br>"id":0<br>} | {<br>"results": "5",<br> "result_type": "int",<br> "id": 0<br>} |
-| 1 | {<br>"method":"nroot",<br>"params":[3,8],<br>"param_types":"[int,int]",<br>"id":1<br>} |{<br>"results": "2.0",<br> "result_type": "double",<br> "id": 1<br>}|
-| 2 | {<br>"method":"reverse",<br>"params":"hello",<br>"param_types":"string",<br>"id":2<br>} |{<br>"results": "olleh",<br> "result_type": "str",<br> "id": 2<br>}|
-| 3 | {<br>"method":"validAnagram",<br>"params":["anagram","ano grew"],<br>"param_types":"[string,string]",<br>"id":3<br>} |{<br>"results": "False",<br> "result_type": "bool",<br> "id": 3<br>}|
-| 4 | {<br>"method":"sort",<br>"params":["Nice","to","meet","you"],<br>"param_types":"string[]",<br>"id":4<br>} |{<br>"results": "['Nice', 'meet', 'to', 'you']",<br> "result_type": "list",<br> "id": 4<br>}|
-| 5 | {<br>"method":"floor",<br>"params":5.345,<br>"param_types":"float",<br>"id":5<br>} | Invalid parameter |
-| 6 | {<br>"method":"subtract",<br>"params":[42,23],<br>"param_types":"[int,int]",<br>"id":6<br>} | Function not found |
-
 
 ## 💾使用技術
 <table>
@@ -182,7 +169,19 @@ node client.py
 | ------- | ------- |
 | メッセージの表示 | 送受信されたメッセージを表示します。 |
 | クライアント | ユーザーから入力された数字を受け取り、その入力と紐づくデータへ変換します。<br>その後、サーバーに送信します。<br>また、サーバからのメッセージを受信します。 |
-| サーバ | クライアントからデータを受け取ります。<br>受け取ったデータをもとに、実行する関数を判断します。<br>関数の実行により得られた出力を応答としてクライアントに送り返します。 |
+| サーバ | クライアントからデータを受け取ります。<br>受け取ったデータをもとに、実行する関数を判断します。<br>関数の実行結果を応答としてクライアントに送り返します。 |
+| エラーハンドリング | サーバが、クライアントから不適切なデータを受け取った場合は、下記のように表示します。<br>・サーバが期待している型とparam_typesが異なる場合:`Invalid parameter`<br>・methodの名前が見つからない場合:`Function not found` |
+
+### RPCの入出力表
+| 入力 | 入力に紐づくデータ | 出力 |
+| ------- | ------- | ------- |
+| 0 | {<br>"method":"floor",<br>"params":5.345,<br>"param_types":"double",<br>"id":0<br>} | {<br>"results": "5",<br> "result_type": "int",<br> "id": 0<br>} |
+| 1 | {<br>"method":"nroot",<br>"params":[3,8],<br>"param_types":"[int,int]",<br>"id":1<br>} |{<br>"results": "2.0",<br> "result_type": "double",<br> "id": 1<br>}|
+| 2 | {<br>"method":"reverse",<br>"params":"hello",<br>"param_types":"string",<br>"id":2<br>} |{<br>"results": "olleh",<br> "result_type": "str",<br> "id": 2<br>}|
+| 3 | {<br>"method":"validAnagram",<br>"params":["anagram","ano grew"],<br>"param_types":"[string,string]",<br>"id":3<br>} |{<br>"results": "False",<br> "result_type": "bool",<br> "id": 3<br>}|
+| 4 | {<br>"method":"sort",<br>"params":["Nice","to","meet","you"],<br>"param_types":"string[]",<br>"id":4<br>} |{<br>"results": "['Nice', 'meet', 'to', 'you']",<br> "result_type": "list",<br> "id": 4<br>}|
+| 5 | {<br>"method":"floor",<br>"params":5.345,<br>"param_types":"float",<br>"id":5<br>} | Invalid parameter |
+| 6 | {<br>"method":"subtract",<br>"params":[42,23],<br>"param_types":"[int,int]",<br>"id":6<br>} | Function not found |
 
 ## 📜作成の経緯
 ⭐️後で記載する!!!
