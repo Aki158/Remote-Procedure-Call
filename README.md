@@ -189,27 +189,6 @@ node client.py
 | 5 | {<br>"method":"floor",<br>"params":5.345,<br>"param_types":"float",<br>"id":5<br>} | Invalid parameter |
 | 6 | {<br>"method":"subtract",<br>"params":[42,23],<br>"param_types":"[int,int]",<br>"id":6<br>} | Function not found |
 
-## 📜作成の経緯
-⭐️後で記載する!!!
-
-作成した理由を記載する。
-
-## ⭐️こだわった点
-⭐️後で記載する!!!
-
-テキストや参考にした記事などを再度読み返して技術の理解を深めてから書く。
-
-ここがエンジニアに一番読んでもらいたい箇所なのでできるだけ詳細に書く。
-
-----
-【使えるかもしれない素材】
-
-TCP通信を用いてクライアント、サーバ間でのデータ送受信(JSON形式)を行います。
-
-クライアントは、Javascript(Node.js)、サーバはpythonを使用しRPCのシステムを実装しています。
-
-----
-
 ## 📮今後の実装したいもの
 - [ ] ユーザーが自由に入力できるようにする
 
